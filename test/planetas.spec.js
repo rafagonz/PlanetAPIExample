@@ -171,4 +171,57 @@ describe('Test de planetas: ', function() {
     });
   });
 
+	describe('DELETE /planetas/:id', function() {
+    it('deberia eliminar un planeta existente', function (done) {
+      var id;
+      var data = {
+        "planeta": {
+          "nombre": "Mercurio",
+          "radio": "2.440 km",
+          "distSol": "57.910.000 km",
+          "dia": "1.404 horas",
+          "ano": "87,97 dias",
+          "tempMedia": "179º C",
+          "gravedad": "2,78 m/s2"
+        }
+      };
+
+      request
+      .post('/planetas')
+      .set('Accept', 'application/json')
+      .send(data)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+      .then(function putPlaneta(res) {
+
+        var remove = {
+        "planeta": {
+          "nombre": "Venus",
+          "radio": "6.052 km",
+          "distSol": "108.208.930 km",
+          "tempMedia": "457º C",
+          "gravedad": "8,9 m/s2"
+        }
+      };
+
+      id = res.body.planeta.id;
+
+      return request.delete('/planetas/' + id)
+               .set('Accept', 'application/json')
+               .send(remove)
+               .expect(204)
+               //.expect('Content-Type', /application\/json/);
+      }, done)
+      .then(function assertions(res) {
+        var planeta;
+        var body = res.body;
+        console.log('GET body', body);
+        // Respuesta vacia
+        expect(body).to.be.empty;
+
+        done();
+      }, done);
+
+    });
+  });
 });

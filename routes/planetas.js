@@ -78,6 +78,16 @@ router.route('/:id')
   response.json({
     planeta: planeta
   });
+}).delete(function(request, response){
+	if(!request.body.planeta)
+		response.status(400).send({ error: 'Por favor, introduce un planeta'});
+	
+	delete planetas[request.params.id];
+
+	response.status(204);
+
+  // Enviamos la respuesta
+  response.send();
 });
 
 module.exports = router;
